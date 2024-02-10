@@ -16,7 +16,7 @@ function App() {
     <div
       className={`${
         theme === "light" ? "text-black" : "text-white"
-      } text-body-m md:text-body-l`}
+      } text-body-m md:text-body-l h-screen w-screen`}
     >
       <AppLayout>
         <Outlet />
