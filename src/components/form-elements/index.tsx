@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Check, ChevronUp, ChevronDown } from "../../assets";
 import { SecondaryBtn } from "../buttons";
 import { Close } from "@mui/icons-material";
 import uuid from "react-uuid";
+import { useOnClickOutside, useTheme } from "../../hooks";
 interface CheckboxProps {
   label: string;
   isChecked?: boolean;
@@ -26,6 +27,8 @@ interface DropdownProps {
   onSelect: (value: string) => void;
   name: string;
 }
+
+type Field = { value: string; id: string };
 
 export const Checkbox = ({
   label,
@@ -73,7 +76,7 @@ export const TextField = ({
   isEmptyError = false,
   defaultValue,
 }: TextFieldProps) => {
-  const [isError, setIsError] = useState<boolean>(isEmptyError);
+  const [isError, setIsError] = React.useState<boolean>(isEmptyError);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "") {
       setIsError(true);
@@ -104,6 +107,23 @@ export const TextField = ({
   );
 };
 
+export const TextArea = ({
+  name,
+  placeholder,
+}: {
+  name: string;
+  placeholder: string;
+}) => {
+  return (
+    <textarea
+      name={name}
+      placeholder={placeholder}
+      id=""
+      className="h-48 w-full p-4 border border-medium-grey border-opacity-25"
+    />
+  );
+};
+
 export const Dropdown = ({
   options,
   onSelect,
@@ -111,13 +131,14 @@ export const Dropdown = ({
   name,
 }: DropdownProps) => {
   const [open, setOpen] = React.useState<boolean>(false);
-  const [selected, setSelected] = useState(defaultSelected);
+  const [selected, setSelected] = React.useState(defaultSelected);
+  const statusRef = React.useRef<HTMLUListElement>(null);
   const handleOpen = () => setOpen((prev) => !prev);
-
   const handleSelect = (option: Option) => {
     onSelect(option.value);
     setSelected(option);
   };
+  useOnClickOutside(statusRef, () => setOpen(false));
   return (
     <div className="relative">
       <select
@@ -136,6 +157,7 @@ export const Dropdown = ({
       <button
         className="h-10 w-full rounded-md flex items-center justify-between px-4 border"
         onClick={handleOpen}
+        type="button"
       >
         <span>{selected.label}</span>
         {open ? (
@@ -147,7 +169,8 @@ export const Dropdown = ({
       <ul
         className={`absolute left-0 right-0 ${
           open ? "h-fit py-4" : "h-0"
-        } overflow-hidden`}
+        } overflow-hidden z-20 bg-white`}
+        ref={statusRef}
       >
         {options.map((option: Option) => (
           <li
@@ -166,11 +189,13 @@ export const Dropdown = ({
 export const DynamicTextField = ({
   buttonText,
   label,
+  defaultFields = [],
 }: {
   buttonText: string;
   label: string;
+  defaultFields?: Field[];
 }) => {
-  const [fields, setFields] = useState<{ value: string; id: string }[]>([]);
+  const [fields, setFields] = React.useState<Field[]>(defaultFields || []);
 
   const handleAdd = () => {
     const newFields = [...fields, { value: "", id: uuid() }];
@@ -220,12 +245,23 @@ export const DynamicTextField = ({
 export const Form = ({
   title,
   children,
+  onClose,
 }: {
   title: string;
   children: JSX.Element;
+  onClose: () => void;
 }) => {
+  const { theme } = useTheme();
+  const ref = React.useRef<HTMLFormElement>(null);
+  useOnClickOutside(ref, onClose);
   return (
-    <form action="" className="p-4 flex flex-col gap-6 w-full">
+    <form
+      action=""
+      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md ${
+        theme === "dark" ? "bg-dark-grey" : "bg-white"
+      }`}
+      ref={ref}
+    >
       <span className="text-l">{title}</span>
       {children}
     </form>

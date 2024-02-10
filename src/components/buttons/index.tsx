@@ -1,13 +1,16 @@
+import React from "react";
+
 interface BtnProps {
   onClick?: () => void;
   children?: JSX.Element;
   type?: "button" | "submit" | "reset";
-  size?: "large" | "small";
+  size?: "large" | "medium" | "small";
 }
 
 export const PrimaryBtn = (props: BtnProps) => {
   const { onClick, children, type = "button", size } = props;
-  const height = size === "small" ? "40px" : "48px";
+  const height =
+    size === "small" ? "32px" : size === "medium" ? "40px" : "48px";
   return (
     <button
       type={type}
@@ -44,6 +47,28 @@ export const DestructiveBtn = (props: BtnProps) => {
       className="w-full h-10 rounded-full bg-red hover:bg-red-hover transition-colors text-white text-m"
     >
       {children}
+    </button>
+  );
+};
+
+export const ToggleBtn = ({
+  onClick,
+  position,
+}: {
+  onClick: () => void;
+  position: "left" | "right";
+}) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="bg-main-purple h-5 w-10 rounded-full relative"
+    >
+      <div
+        className={`h-[14px] w-[14px] rounded-full bg-white absolute top-2/4 -translate-y-2/4 transition-transform ${
+          position === "left" ? "translate-x-[4px]" : "translate-x-[22px]"
+        }`}
+      ></div>
     </button>
   );
 };
