@@ -1,9 +1,10 @@
 import { LogoDark, LogoLight } from "../../../assets";
-import { useTheme } from "../../../hooks";
+import { useAuth, useTheme } from "../../../hooks";
 import BoardsPanel from "./BoardsPanel";
 
 function Sidebar() {
   const { theme } = useTheme();
+  const { logout } = useAuth();
   return (
     <div
       className={`max-md:hidden w-72 lg:w-80 flex flex-col border-r  ${
@@ -16,6 +17,9 @@ function Sidebar() {
         <img src={theme === "light" ? LogoDark : LogoLight} alt="" />
       </div>
       <BoardsPanel />
+      <button className="px-6 py-2" onClick={logout}>
+        Logout
+      </button>
     </div>
   );
 }

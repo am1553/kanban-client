@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { FormEvent } from "react";
 import { Check, ChevronUp, ChevronDown } from "../../assets";
 import { SecondaryBtn } from "../buttons";
 import { Close } from "@mui/icons-material";
@@ -17,6 +17,7 @@ interface TextFieldProps {
   placeholder: string;
   isEmptyError: boolean;
   defaultValue?: string;
+  type?: "text" | "email" | "password";
 }
 
 type Option = { label: string; value: string };
@@ -75,6 +76,7 @@ export const TextField = ({
   onChange,
   isEmptyError = false,
   defaultValue,
+  type = "text",
 }: TextFieldProps) => {
   const [isError, setIsError] = React.useState<boolean>(isEmptyError);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +91,7 @@ export const TextField = ({
   return (
     <div className="relative">
       <input
-        type="text"
+        type={type}
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
@@ -246,21 +248,32 @@ export const Form = ({
   title,
   children,
   onClose,
+  className,
+  onSubmit,
 }: {
   title: string;
   children: JSX.Element;
   onClose: () => void;
+  className: string;
+  onSubmit: (formData: FormData) => void;
 }) => {
   const { theme } = useTheme();
   const ref = React.useRef<HTMLFormElement>(null);
   useOnClickOutside(ref, onClose);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(ref.current!);
+    onSubmit(formData);
+  };
   return (
     <form
       action=""
-      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md ${
+      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md ${
         theme === "dark" ? "bg-dark-grey" : "bg-white"
-      }`}
+      } ${className}`}
       ref={ref}
+      onSubmit={handleSubmit}
     >
       <span className="text-l">{title}</span>
       {children}
