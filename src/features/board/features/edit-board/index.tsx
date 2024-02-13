@@ -20,7 +20,6 @@ function EditBoard({ closeModal }: { closeModal: () => void }) {
     id: column.id,
   }));
   const handleSubmit = (formData: FormData) => {
-    console.log("hi");
     const name = formData.get("name") as string;
     const columns = columnFields.map((column) => ({
       name: column.value,

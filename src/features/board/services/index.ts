@@ -12,7 +12,7 @@ export type TaskType = {
 };
 
 export type Boards = { id: string; name: string };
-export type Column = { id: string; name: string; color: string };
+export type Column = { id: string; name: string; color?: string };
 export type Board = { name: string; id: string; columns: Column[] };
 function useBoards() {
   const queryClient = useQueryClient();
