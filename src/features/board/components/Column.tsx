@@ -7,7 +7,7 @@ function Column({
   data: {
     name: string;
     id: string;
-    color: string;
+    color?: string;
     tasks: TaskType[] | undefined;
   };
 }) {
