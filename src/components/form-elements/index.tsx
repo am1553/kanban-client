@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef } from "react";
+import React, { FormEvent, useEffect } from "react";
 import { Check, ChevronUp, ChevronDown } from "../../assets";
 import { SecondaryBtn } from "../buttons";
 import { Close } from "@mui/icons-material";
@@ -18,7 +18,7 @@ interface TextFieldProps {
   isEmptyError: boolean;
   defaultValue?: string;
   type?: "text" | "email" | "password";
-  focus: boolean;
+  focus?: boolean;
 }
 
 type Option = { label: string; value: string };
@@ -246,7 +246,7 @@ export const DynamicTextField = ({
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor="">{label}</label>
-      {fields.map((field: { value: string; id: string }, i) => {
+      {fields.map((field: { value: string; id: string }) => {
         return (
           <div className="flex gap-2 items-center" key={field.id}>
             <div className="flex-1">

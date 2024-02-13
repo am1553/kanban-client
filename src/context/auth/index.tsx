@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import useCookie from "../../hooks/useCookie";
 import { auth } from "../../lib/axios-config";
-import { redirect } from "react-router-dom";
 
 type Context = {
   token: string | null;

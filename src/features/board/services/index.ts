@@ -50,7 +50,7 @@ function useBoards() {
       .catch((err) => console.error(err));
   };
 
-  const editBoard = async (data) => {
+  const editBoard = async (data: Board) => {
     return await api
       .put(`boards/${boardID}`, data)
       .then((res) => res.data)

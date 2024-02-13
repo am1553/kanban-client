@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useOnClickOutside, useTheme } from "../../../hooks";
 import { VerticalEllipsis } from "../../../assets";
 import { Checkbox, Dropdown } from "../../../components/form-elements";
