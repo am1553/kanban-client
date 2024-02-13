@@ -1,14 +1,13 @@
-import React from "react";
-
 interface BtnProps {
   onClick?: () => void;
   children?: JSX.Element;
   type?: "button" | "submit" | "reset";
   size?: "large" | "medium" | "small";
+  disabled?: boolean;
 }
 
 export const PrimaryBtn = (props: BtnProps) => {
-  const { onClick, children, type = "button", size } = props;
+  const { onClick, children, type = "button", size, disabled } = props;
   const height =
     size === "small" ? "32px" : size === "medium" ? "40px" : "48px";
   return (
@@ -17,6 +16,7 @@ export const PrimaryBtn = (props: BtnProps) => {
       onClick={onClick}
       className={`w-full rounded-full bg-main-purple text-white capitalize text-m hover:bg-main-purple-hover transition-colors`}
       style={{ height }}
+      disabled={disabled}
     >
       {children}
     </button>

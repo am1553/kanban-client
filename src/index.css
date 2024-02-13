@@ -2,12 +2,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-color: #828fa3 #828fa300;
+  scrollbar-width: thin;
+}
+
+/* For WebKit based browsers */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  scrollbar-color: #828fa3;
+  background-color: #828fa300;
+}
+
+/* For Internet Explorer */
+/* The following properties only work in IE 10+ */
+*::-ms-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-ms-scrollbar-thumb {
+  background-color: #828fa3;
 }
 
 label {

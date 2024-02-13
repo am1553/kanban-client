@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useRef } from "react";
 import { Check, ChevronUp, ChevronDown } from "../../assets";
 import { SecondaryBtn } from "../buttons";
 import { Close } from "@mui/icons-material";
@@ -18,13 +18,14 @@ interface TextFieldProps {
   isEmptyError: boolean;
   defaultValue?: string;
   type?: "text" | "email" | "password";
+  focus: boolean;
 }
 
 type Option = { label: string; value: string };
 
 interface DropdownProps {
   options: Option[];
-  defaultSelected: Option;
+  defaultSelected: Option | null;
   onSelect: (value: string) => void;
   name: string;
 }
@@ -77,7 +78,9 @@ export const TextField = ({
   isEmptyError = false,
   defaultValue,
   type = "text",
+  focus = false,
 }: TextFieldProps) => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const [isError, setIsError] = React.useState<boolean>(isEmptyError);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "") {
@@ -88,6 +91,11 @@ export const TextField = ({
     onChange(e.target.value);
   };
 
+  useEffect(() => {
+    if (!focus || !inputRef.current) return;
+    inputRef.current.focus();
+  }, [focus, inputRef.current]);
+
   return (
     <div className="relative">
       <input
@@ -95,10 +103,11 @@ export const TextField = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
-        className={`h-10 w-full rounded-md px-4 border ${
+        className={`h-10 w-full rounded-md px-4 border bg-white bg-opacity-0 ${
           isError ? "border-red" : "border-medium-grey border-opacity-25"
         }`}
         defaultValue={defaultValue}
+        ref={inputRef}
       />
       {isError && (
         <span className="text-red absolute right-4 top-2/4 -translate-y-2/4">
@@ -112,16 +121,19 @@ export const TextField = ({
 export const TextArea = ({
   name,
   placeholder,
+  defaultValue,
 }: {
   name: string;
   placeholder: string;
+  defaultValue?: string;
 }) => {
   return (
     <textarea
+      defaultValue={defaultValue}
       name={name}
       placeholder={placeholder}
       id=""
-      className="h-48 w-full p-4 border border-medium-grey border-opacity-25"
+      className="h-48 w-full p-4 border border-medium-grey border-opacity-25 bg-white bg-opacity-0"
     />
   );
 };
@@ -132,6 +144,7 @@ export const Dropdown = ({
   defaultSelected,
   name,
 }: DropdownProps) => {
+  const { theme } = useTheme();
   const [open, setOpen] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState(defaultSelected);
   const statusRef = React.useRef<HTMLUListElement>(null);
@@ -139,14 +152,17 @@ export const Dropdown = ({
   const handleSelect = (option: Option) => {
     onSelect(option.value);
     setSelected(option);
+    setOpen(false);
   };
   useOnClickOutside(statusRef, () => setOpen(false));
-  return (
+  return options.length < 1 ? (
+    <span>No columns for this board.</span>
+  ) : (
     <div className="relative">
       <select
         name={name}
         id=""
-        value={selected.value}
+        value={selected?.value}
         onChange={() => {}}
         className="absolute -z-10 pointer-events-none opacity-0"
       >
@@ -157,11 +173,11 @@ export const Dropdown = ({
         ))}
       </select>
       <button
-        className="h-10 w-full rounded-md flex items-center justify-between px-4 border"
+        className="h-10 w-full rounded-md flex items-center justify-between px-4 border border-medium-grey border-opacity-25 capitalize"
         onClick={handleOpen}
         type="button"
       >
-        <span>{selected.label}</span>
+        <span>{selected?.label}</span>
         {open ? (
           <img src={ChevronUp} alt="" />
         ) : (
@@ -169,16 +185,18 @@ export const Dropdown = ({
         )}
       </button>
       <ul
-        className={`absolute left-0 right-0 ${
+        className={`absolute left-0 right-0 rounded-md shadow-md ${
           open ? "h-fit py-4" : "h-0"
-        } overflow-hidden z-20 bg-white`}
+        } ${
+          theme === "light" ? "bg-white" : "bg-dark-grey"
+        } overflow-hidden z-20`}
         ref={statusRef}
       >
         {options.map((option: Option) => (
           <li
             key={option.value}
             onClick={() => handleSelect(option)}
-            className="cursor-pointer h-10 flex items-center px-4"
+            className={`cursor-pointer h-10 flex items-center px-4 hover:text-white hover:bg-main-purple transition-colors capitalize`}
           >
             {option.label}
           </li>
@@ -192,13 +210,16 @@ export const DynamicTextField = ({
   buttonText,
   label,
   defaultFields = [],
+  name,
+  getFields,
 }: {
   buttonText: string;
   label: string;
   defaultFields?: Field[];
+  name: string;
+  getFields?: (fields: { value: string; id: string }[]) => void;
 }) => {
   const [fields, setFields] = React.useState<Field[]>(defaultFields || []);
-
   const handleAdd = () => {
     const newFields = [...fields, { value: "", id: uuid() }];
     setFields(newFields);
@@ -213,22 +234,29 @@ export const DynamicTextField = ({
     const indexOfChange = fields.findIndex((field) => field.id === id);
     const newValues = fields;
     newValues[indexOfChange].value = value;
+
     setFields(newValues);
   };
+
+  useEffect(() => {
+    if (!getFields) return;
+    getFields(fields);
+  }, [fields, getFields]);
 
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor="">{label}</label>
-      {fields.map((field: { value: string; id: string }) => {
+      {fields.map((field: { value: string; id: string }, i) => {
         return (
           <div className="flex gap-2 items-center" key={field.id}>
             <div className="flex-1">
               <TextField
-                name="column-name"
+                name={name}
                 placeholder=""
                 onChange={(value) => handleChange(field.id, value)}
                 isEmptyError={false}
                 defaultValue={field.value}
+                focus={false}
               />
             </div>
             <button type="button" onClick={() => handleRemove(field.id)}>
@@ -254,7 +282,7 @@ export const Form = ({
   title: string;
   children: JSX.Element;
   onClose: () => void;
-  className: string;
+  className?: string;
   onSubmit: (formData: FormData) => void;
 }) => {
   const { theme } = useTheme();
@@ -270,7 +298,7 @@ export const Form = ({
     <form
       action=""
       className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md ${
-        theme === "dark" ? "bg-dark-grey" : "bg-white"
+        theme === "dark" ? "bg-dark-grey text-white" : "bg-white text-black"
       } ${className}`}
       ref={ref}
       onSubmit={handleSubmit}

@@ -14,13 +14,13 @@ function LinkListItem({
   return (
     <Link
       to={id}
-      className={`h-12 rounded-r-full flex items-center gap-4 text-m text-medium-grey px-6 mr-6 ${
+      className={`h-12 rounded-r-full flex items-center gap-4 text-m capitalize text-medium-grey tracking-normal  px-6 mr-6 ${
         boardID === id ? "bg-main-purple text-white" : "bg-opacity-0"
       }`}
       onClick={onClick}
     >
       <img src={boardID === id ? WhiteBoard : Board} alt="" />
-      <span>{name}</span>
+      <span className="">{name}</span>
     </Link>
   );
 }

@@ -4,31 +4,37 @@ import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ThemeContextProvider from "./context/theme/index.tsx";
-import { Board, NewTask } from "./features/board/index.ts";
+import { Board, NoBoards } from "./features/board/index.ts";
 import { Login, Register } from "./features/auth/index.ts";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AuthContextProvider from "./context/auth/index.tsx";
-
+import { AuthLayout } from "./layout/index.ts";
 const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
     children: [
       {
-        path: "login",
+        path: ":boardID",
+        Component: Board,
+      },
+      {
+        path: "",
+        Component: NoBoards,
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "",
         Component: Login,
       },
       {
         path: "register",
         Component: Register,
-      },
-      {
-        path: ":boardID",
-        Component: Board,
-      },
-      {
-        path: "new-task",
-        Component: NewTask,
       },
     ],
   },

@@ -1,5 +1,4 @@
 import { useMutation } from "react-query";
-import { auth } from "../../../lib/axios-config";
 import { useNavigate } from "react-router-dom";
 import { useAuth, useCookie } from "../../../hooks";
 
@@ -23,10 +22,32 @@ export const useAuthServices = () => {
   const { setCookie } = useCookie();
   const { login, register } = useAuth();
 
-  const handleAuthSuccess = (token: string, user: User) => {
+  const handleAuthSuccess = async (token: string, user: User) => {
     setCookie("token", token);
     localStorage.setItem("user", JSON.stringify(user));
-    navigate("/");
+    const fetchBoards = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/boards`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const jsonData = await response.json();
+        return jsonData;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const boards = await fetchBoards();
+    navigate(boards.length < 1 ? "/" : `/${boards[0].id}`);
   };
 
   const loginMutation = useMutation({

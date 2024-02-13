@@ -6,10 +6,60 @@ import {
   TextField,
 } from "../../../../components/form-elements";
 import { PrimaryBtn } from "../../../../components/buttons";
+import { TaskType, useBoards, useTasks } from "../../services";
+import { useState } from "react";
 
-function EditTask() {
+function EditTask({
+  closeModal,
+  data,
+}: {
+  closeModal: () => void;
+  data: TaskType;
+}) {
+  console.log(data);
+  const [subtasksFields, setSubtasksFields] = useState<
+    { id: string; value: string }[]
+  >([]);
+  const { editMutation } = useTasks();
+  const { boardQuery } = useBoards();
+  const board = boardQuery?.data;
+  const columnsOption = board?.columns.map((column) => ({
+    label: column.name,
+    value: column.id,
+  }));
+  const subtaskFields =
+    data.subtasks.map((subtask) => ({
+      value: subtask.title,
+      id: subtask.id!,
+    })) || [];
+
+  const handleSubmit = (formData: FormData) => {
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const columnID = formData.get("status") as string;
+    const subtasks = subtasksFields;
+    const existingSubtasksIDs = data.subtasks.map((subtask) => subtask.id);
+    const filterNewSubtasks = subtasks
+      .filter((subtask) => !existingSubtasksIDs.includes(subtask.id))
+      .map((subtask) => ({ title: subtask.value }));
+    const filterExistingSubtasks = subtasks
+      .filter((subtask) => existingSubtasksIDs.includes(subtask.id))
+      .map((subtask) => ({ title: subtask.value, id: subtask.id }));
+    const combinedSubtasks = [...filterExistingSubtasks, ...filterNewSubtasks];
+    const newTaskData: TaskType = {
+      id: data.id,
+      title,
+      description,
+      column_id: columnID,
+      subtasks: combinedSubtasks,
+    };
+    editMutation.mutate(newTaskData, {
+      onSuccess: closeModal,
+    });
+  };
+
   return (
-    <Form title="Edit Task">
+    <Form title="Edit Task" onClose={closeModal} onSubmit={handleSubmit}>
       <>
         <div className="flex flex-col gap-2">
           <label htmlFor="">Title</label>
@@ -18,6 +68,8 @@ function EditTask() {
             placeholder="e.g. Take a coffee break"
             isEmptyError={false}
             onChange={() => {}}
+            focus
+            defaultValue={data.title}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -25,24 +77,33 @@ function EditTask() {
           <TextArea
             name="description"
             placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little."
+            defaultValue={data.description}
           />
         </div>
 
-        <DynamicTextField label="Subtasks" buttonText={"+ Add New Subtask"} />
+        <DynamicTextField
+          name="subtasks"
+          label="Subtasks"
+          buttonText={"+ Add New Subtask"}
+          defaultFields={subtaskFields}
+          getFields={(fields: { id: string; value: string }[]) => {
+            setSubtasksFields(fields);
+          }}
+        />
         <div className="flex flex-col gap-2">
           <label htmlFor="">Status</label>
           <Dropdown
-            options={[
-              { label: "Todo", value: "todo" },
-              { label: "Doing", value: "doing" },
-              { label: "Done", value: "done" },
-            ]}
-            defaultSelected={{ label: "Todo", value: "todo" }}
+            options={columnsOption ? columnsOption : []}
+            defaultSelected={
+              columnsOption?.find(
+                (column) => column.value === data.column_id
+              ) || null
+            }
             name="status"
             onSelect={() => {}}
           />
         </div>
-        <PrimaryBtn>
+        <PrimaryBtn type="submit">
           <span>Save Changes</span>
         </PrimaryBtn>
       </>

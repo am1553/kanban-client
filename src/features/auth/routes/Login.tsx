@@ -52,7 +52,7 @@ function Login() {
               <span>Login</span>
             </PrimaryBtn>
           </div>
-          <Link to="/register">Register?</Link>
+          <Link to="/auth/register">Register?</Link>
         </>
       </Form>
     </>

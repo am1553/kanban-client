@@ -4,10 +4,35 @@ import {
   TextField,
 } from "../../../../components/form-elements";
 import { PrimaryBtn } from "../../../../components/buttons";
-import uuid from "react-uuid";
-function EditBoard() {
+import { useBoards } from "../..";
+import { useState } from "react";
+function EditBoard({ closeModal }: { closeModal: () => void }) {
+  const [columnFields, setColumnFields] = useState<
+    {
+      value: string;
+      id: string;
+    }[]
+  >([]);
+  const { boardQuery, updateMutation } = useBoards();
+  const board = boardQuery?.data;
+  const columnsOption = board?.columns.map((column) => ({
+    value: column.name,
+    id: column.id,
+  }));
+  const handleSubmit = (formData: FormData) => {
+    console.log("hi");
+    const name = formData.get("name") as string;
+    const columns = columnFields.map((column) => ({
+      name: column.value,
+      id: column.id,
+    }));
+    const newData = { name, columns, id: board!.id };
+    updateMutation.mutate(newData);
+    closeModal();
+  };
+
   return (
-    <Form title="Edit Board">
+    <Form title="Edit Board" onClose={closeModal} onSubmit={handleSubmit}>
       <>
         <div className="flex flex-col gap-2">
           <label htmlFor="">Board Name</label>
@@ -16,19 +41,18 @@ function EditBoard() {
             placeholder="e.g. Web Design"
             isEmptyError={false}
             onChange={() => {}}
-            defaultValue="Platform Launch"
+            defaultValue={board?.name || undefined}
+            focus={false}
           />
         </div>
         <DynamicTextField
           label="Board Columns"
           buttonText={"+ Add New Column"}
-          defaultFields={[
-            { value: "Todo", id: uuid() },
-            { value: "Doing", id: uuid() },
-            { value: "Done", id: uuid() },
-          ]}
+          defaultFields={columnsOption}
+          name="column-name"
+          getFields={(fields) => setColumnFields(fields)}
         />
-        <PrimaryBtn>
+        <PrimaryBtn type="submit">
           <span>Save Changes</span>
         </PrimaryBtn>
       </>

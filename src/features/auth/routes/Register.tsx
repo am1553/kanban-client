@@ -2,6 +2,7 @@ import { Form, TextField } from "../../../components/form-elements";
 import { PrimaryBtn } from "../../../components/buttons";
 import { ColorRing } from "react-loader-spinner";
 import { useAuthServices } from "../services";
+import { Link } from "react-router-dom";
 
 function Register() {
   const { registerMutation } = useAuthServices();
@@ -66,6 +67,7 @@ function Register() {
             <span>Register</span>
           </PrimaryBtn>
         </div>
+        <Link to={"/auth"}>Login?</Link>
       </>
     </Form>
   );
