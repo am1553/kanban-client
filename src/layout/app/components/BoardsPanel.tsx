@@ -2,7 +2,7 @@ import { useOnClickOutside, useTheme } from "../../../hooks";
 import LinkListItem from "./LinkListItem";
 import { PurpleBoard } from "../../../assets";
 import ThemeToggle from "./ThemeToggle";
-import React, { SetStateAction, useMemo, useState } from "react";
+import React, { SetStateAction, useMemo } from "react";
 import { useBoards } from "../../../features/board/services";
 type Props = {
   setIsOpen?: React.Dispatch<SetStateAction<boolean>>;
