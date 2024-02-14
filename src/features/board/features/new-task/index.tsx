@@ -7,6 +7,7 @@ import {
 } from "../../../../components/form-elements";
 import { PrimaryBtn } from "../../../../components/buttons";
 import { useTasks, useBoards, TaskType } from "../../services";
+import Loader from "../../../../components/loader";
 
 function NewTask({ closeModal }: { closeModal: () => void }) {
   const { boardQuery } = useBoards();
@@ -32,7 +33,9 @@ function NewTask({ closeModal }: { closeModal: () => void }) {
     createMutation.mutate(data, { onSuccess: closeModal });
   };
 
-  return (
+  return createMutation.isLoading ? (
+    <Loader />
+  ) : (
     <Form title="Add New Task" onClose={closeModal} onSubmit={handleSubmit}>
       <>
         <div className="flex flex-col gap-2">

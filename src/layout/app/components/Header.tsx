@@ -6,6 +6,7 @@ import { Modal } from "../../../components/portal";
 import { EditBoard, NewTask, useBoards } from "../../../features/board";
 import { useRef, useState } from "react";
 import DeleteConfirmation from "../../../components/delete-confirmation";
+import Loader from "../../../components/loader";
 
 function Header() {
   const { boardQuery, deleteMutation } = useBoards();
@@ -44,8 +45,9 @@ function Header() {
         }`}
       >
         <img src={LogoMobile} alt="" className="md:hidden" />
-
-        <BoardsPanelToggle />
+        <div className="flex-1">
+          {board?.name ? <BoardsPanelToggle /> : null}
+        </div>
 
         <div className="flex items-center md:gap-2 lg:gap-4">
           <PrimaryBtn
@@ -96,12 +98,16 @@ function Header() {
         <EditBoard closeModal={closeModalEditBoard} />
       </Modal>
       <Modal isOpen={isModalDeleteBoard} onClose={closeModalDeleteBoard}>
-        <DeleteConfirmation
-          title="Delete this board?"
-          confirmationText={`Are you sure you want to delete the ‘${board?.name}’ board? This action will remove all columns and tasks and cannot be reversed.`}
-          onCancel={closeModalDeleteBoard}
-          onDelete={handleDeleteBoard}
-        />
+        {deleteMutation.isLoading ? (
+          <Loader />
+        ) : (
+          <DeleteConfirmation
+            title="Delete this board?"
+            confirmationText={`Are you sure you want to delete the ‘${board?.name}’ board? This action will remove all columns and tasks and cannot be reversed.`}
+            onCancel={closeModalDeleteBoard}
+            onDelete={handleDeleteBoard}
+          />
+        )}
       </Modal>
     </>
   );

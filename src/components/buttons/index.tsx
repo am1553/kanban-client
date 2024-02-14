@@ -14,7 +14,9 @@ export const PrimaryBtn = (props: BtnProps) => {
     <button
       type={type}
       onClick={onClick}
-      className={`w-full rounded-full bg-main-purple text-white capitalize text-m hover:bg-main-purple-hover transition-colors`}
+      className={`w-full rounded-full bg-main-purple text-white capitalize text-m hover:bg-main-purple-hover transition-colors ${
+        disabled ? "bg-opacity-50 pointer-events-none" : null
+      }`}
       style={{ height }}
       disabled={disabled}
     >

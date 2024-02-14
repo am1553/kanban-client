@@ -5,6 +5,7 @@ import { TaskType, useTasks } from "../services";
 import ViewTask from "./ViewTask";
 import { EditTask } from "..";
 import DeleteConfirmation from "../../../components/delete-confirmation";
+import Loader from "../../../components/loader";
 
 function Task({ data }: { data: TaskType }) {
   const { deleteMutation } = useTasks();
@@ -56,12 +57,16 @@ function Task({ data }: { data: TaskType }) {
         <EditTask closeModal={handleCloseIsModalEditTask} data={data} />
       </Modal>
       <Modal isOpen={isModalDeleteTask} onClose={handleCloseIsModalDeleteTask}>
-        <DeleteConfirmation
-          title="Delete this task?"
-          confirmationText={`Are you sure you want to delete the ‘${data.title}’ task and its subtasks? This action cannot be reversed.`}
-          onDelete={handleDeleteTask}
-          onCancel={handleCloseIsModalDeleteTask}
-        />
+        {deleteMutation.isLoading ? (
+          <Loader />
+        ) : (
+          <DeleteConfirmation
+            title="Delete this task?"
+            confirmationText={`Are you sure you want to delete the ‘${data.title}’ task and its subtasks? This action cannot be reversed.`}
+            onDelete={handleDeleteTask}
+            onCancel={handleCloseIsModalDeleteTask}
+          />
+        )}
       </Modal>
     </>
   );

@@ -8,6 +8,7 @@ import {
 import { PrimaryBtn } from "../../../../components/buttons";
 import { TaskType, useBoards, useTasks } from "../../services";
 import { useState } from "react";
+import Loader from "../../../../components/loader";
 
 function EditTask({
   closeModal,
@@ -58,7 +59,9 @@ function EditTask({
     });
   };
 
-  return (
+  return editMutation.isLoading ? (
+    <Loader />
+  ) : (
     <Form title="Edit Task" onClose={closeModal} onSubmit={handleSubmit}>
       <>
         <div className="flex flex-col gap-2">

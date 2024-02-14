@@ -4,14 +4,12 @@ import { PurpleBoard } from "../../../assets";
 import ThemeToggle from "./ThemeToggle";
 import React, { SetStateAction, useMemo, useState } from "react";
 import { useBoards } from "../../../features/board/services";
-import { Modal } from "../../../components/portal";
-import { NewBoard } from "../../../features/board";
 type Props = {
   setIsOpen?: React.Dispatch<SetStateAction<boolean>>;
+  setIsModal?: React.Dispatch<SetStateAction<boolean>>;
 };
 
-function BoardsPanel({ setIsOpen }: Props) {
-  const [isModal, setIsModal] = useState<boolean>(false);
+function BoardsPanel({ setIsOpen, setIsModal }: Props) {
   const { boardsQuery } = useBoards();
   const boards = useMemo(() => {
     return boardsQuery.data;
@@ -45,7 +43,14 @@ function BoardsPanel({ setIsOpen }: Props) {
           <button
             type="button"
             className="flex items-center text-m gap-4 text-main-purple px-6"
-            onClick={() => setIsModal(true)}
+            onClick={() => {
+              if (setIsOpen) {
+                setIsOpen(false);
+              }
+              if (setIsModal) {
+                setIsModal(true);
+              }
+            }}
           >
             <img src={PurpleBoard} alt="" />
             <span>+ Create New Board</span>
@@ -56,9 +61,6 @@ function BoardsPanel({ setIsOpen }: Props) {
           <ThemeToggle />
         </div>
       </div>
-      <Modal isOpen={isModal}>
-        <NewBoard setIsModal={setIsModal} />
-      </Modal>
     </>
   );
 }

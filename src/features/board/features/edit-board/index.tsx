@@ -6,6 +6,7 @@ import {
 import { PrimaryBtn } from "../../../../components/buttons";
 import { useBoards } from "../..";
 import { useState } from "react";
+import Loader from "../../../../components/loader";
 function EditBoard({ closeModal }: { closeModal: () => void }) {
   const [columnFields, setColumnFields] = useState<
     {
@@ -30,7 +31,9 @@ function EditBoard({ closeModal }: { closeModal: () => void }) {
     closeModal();
   };
 
-  return (
+  return updateMutation.isLoading ? (
+    <Loader />
+  ) : (
     <Form title="Edit Board" onClose={closeModal} onSubmit={handleSubmit}>
       <>
         <div className="flex flex-col gap-2">

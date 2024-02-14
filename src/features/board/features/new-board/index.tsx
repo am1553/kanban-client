@@ -6,6 +6,7 @@ import {
 } from "../../../../components/form-elements";
 import { PrimaryBtn } from "../../../../components/buttons";
 import { useBoards } from "../..";
+import Loader from "../../../../components/loader";
 
 function NewBoard({
   setIsModal,
@@ -19,7 +20,9 @@ function NewBoard({
     const data = { name, columns: columns.map((col) => ({ name: col })) };
     createMutation.mutate(data, { onSuccess: () => setIsModal(false) });
   };
-  return (
+  return createMutation.isLoading ? (
+    <Loader />
+  ) : (
     <Form
       title="Add New Board"
       onClose={() => setIsModal(false)}

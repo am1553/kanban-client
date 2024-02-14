@@ -9,6 +9,7 @@ import { Login, Register } from "./features/auth/index.ts";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AuthContextProvider from "./context/auth/index.tsx";
 import { AuthLayout } from "./layout/index.ts";
+
 const router = createBrowserRouter([
   {
     path: "/",

@@ -1,8 +1,8 @@
 import { Form, TextField } from "../../../components/form-elements";
 import { PrimaryBtn } from "../../../components/buttons";
-import { ColorRing } from "react-loader-spinner";
 import { useAuthServices } from "../services";
 import { Link } from "react-router-dom";
+import Loader from "../../../components/loader";
 
 function Register() {
   const { registerMutation } = useAuthServices();
@@ -16,14 +16,7 @@ function Register() {
     registerMutation.mutate({ first_name, last_name, email, password });
   };
   return registerMutation.isLoading ? (
-    <ColorRing
-      visible={true}
-      height="80"
-      width="80"
-      ariaLabel="color-ring-loading"
-      wrapperClass="color-ring-wrapper"
-      colors={["#635FC7", "#A8A4FF", "#EA5555", "#A8A4FF50", "#FF9898"]}
-    />
+    <Loader />
   ) : (
     <Form
       title="Register"
