@@ -5,7 +5,7 @@ import {
   TextArea,
   TextField,
 } from "../../../../components/form-elements";
-import { PrimaryBtn } from "../../../../components/buttons";
+import { PrimaryBtn, SecondaryBtn } from "../../../../components/buttons";
 import { TaskType, useBoards, useTasks } from "../../services";
 import { useState } from "react";
 import Loader from "../../../../components/loader";
@@ -106,9 +106,14 @@ function EditTask({
             onSelect={() => {}}
           />
         </div>
-        <PrimaryBtn type="submit">
-          <span>Save Changes</span>
-        </PrimaryBtn>
+        <div className="flex gap-4 items-center justify-center w-full">
+          <PrimaryBtn type="submit" size={"medium"}>
+            <span>Save Changes</span>
+          </PrimaryBtn>
+          <SecondaryBtn type="button" onClick={closeModal}>
+            <span>Cancel</span>
+          </SecondaryBtn>
+        </div>
       </>
     </Form>
   );

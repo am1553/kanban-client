@@ -3,7 +3,7 @@ import {
   Form,
   TextField,
 } from "../../../../components/form-elements";
-import { PrimaryBtn } from "../../../../components/buttons";
+import { PrimaryBtn, SecondaryBtn } from "../../../../components/buttons";
 import { useBoards } from "../..";
 import { useState } from "react";
 import Loader from "../../../../components/loader";
@@ -54,9 +54,15 @@ function EditBoard({ closeModal }: { closeModal: () => void }) {
           name="column-name"
           getFields={(fields) => setColumnFields(fields)}
         />
-        <PrimaryBtn type="submit">
-          <span>Save Changes</span>
-        </PrimaryBtn>
+
+        <div className="flex gap-4 items-center justify-center w-full">
+          <PrimaryBtn type="submit" size={"medium"}>
+            <span>Save Changes</span>
+          </PrimaryBtn>
+          <SecondaryBtn type="button" onClick={closeModal}>
+            <span>Cancel</span>
+          </SecondaryBtn>
+        </div>
       </>
     </Form>
   );

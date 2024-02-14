@@ -301,7 +301,7 @@ export const Form = ({
   return (
     <form
       action=""
-      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md max-h-[50vh] min-h-fit overflow-y-auto ${
+      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md max-h-[60vh] min-h-fit overflow-y-auto ${
         theme === "dark" ? "bg-dark-grey text-white" : "bg-white text-black"
       } ${className}`}
       ref={ref}
