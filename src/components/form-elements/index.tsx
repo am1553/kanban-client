@@ -225,6 +225,11 @@ export const DynamicTextField = ({
 }) => {
   const [fields, setFields] = React.useState<Field[]>(defaultFields || []);
   const handleAdd = () => {
+    console.log(fields.length);
+    if (fields.length !== 0 && fields[fields.length - 1].value === "") {
+      console.log(fields[fields.length - 1].value);
+      return;
+    }
     const newFields = [...fields, { value: "", id: uuid() }];
     setFields(newFields);
   };
@@ -250,7 +255,7 @@ export const DynamicTextField = ({
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor="">{label}</label>
-      {fields.map((field: { value: string; id: string }) => {
+      {fields.map((field: { value: string; id: string }, i) => {
         return (
           <div className="flex gap-2 items-center" key={field.id}>
             <div className="flex-1">
@@ -260,7 +265,7 @@ export const DynamicTextField = ({
                 onChange={(value) => handleChange(field.id, value)}
                 isEmptyError={false}
                 defaultValue={field.value}
-                focus={false}
+                focus={i < fields.length - 1 ? false : true}
               />
             </div>
             <button type="button" onClick={() => handleRemove(field.id)}>
