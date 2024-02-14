@@ -103,7 +103,7 @@ export const TextField = ({
         name={name}
         placeholder={placeholder}
         onChange={handleChange}
-        className={`h-10 w-full rounded-md px-4 border bg-white bg-opacity-0 ${
+        className={`h-10 w-full rounded-md px-4 border bg-white bg-opacity-0 text-[16px] ${
           isError ? "border-red" : "border-medium-grey border-opacity-25"
         }`}
         defaultValue={defaultValue}
@@ -297,14 +297,14 @@ export const Form = ({
   return (
     <form
       action=""
-      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md max-h-[60vh] overflow-y-auto ${
+      className={`p-4 flex flex-col gap-6 max-w-[480px] w-full mx-4 rounded-md shadow-md max-h-[60vh] h-full overflow-y-auto ${
         theme === "dark" ? "bg-dark-grey text-white" : "bg-white text-black"
       } ${className}`}
       ref={ref}
       onSubmit={handleSubmit}
     >
       <span className="text-l">{title}</span>
-      {children}
+      <div className="flex flex-col gap-6">{children}</div>
     </form>
   );
 };
