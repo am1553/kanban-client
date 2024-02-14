@@ -73,7 +73,7 @@ export default function AuthContextProvider({
     setToken(null);
     removeCookie("token");
     localStorage.removeItem("user");
-    window.location.href = "/auth";
+    window.location.href = "/";
   };
 
   const values = { token, login, register, logout };
