@@ -3,6 +3,7 @@ import { useOnClickOutside, useTheme } from "../../../hooks";
 import { VerticalEllipsis } from "../../../assets";
 import { Checkbox, Dropdown } from "../../../components/form-elements";
 import { TaskType, useBoards, useSubtasks, useTasks } from "../services";
+import Loader from "../../../components/loader";
 
 function ViewTask({
   closeModal,
@@ -48,7 +49,9 @@ function ViewTask({
 
   useOnClickOutside(ref, closeModal);
   useOnClickOutside(menuRef, () => setIsMenu(false));
-  return (
+  return updateSubtaskMutation.isLoading || updateTaskMutation.isLoading ? (
+    <Loader />
+  ) : (
     <div
       className={` p-4 flex flex-col gap-4 max-w-[480px] w-full mx-4 rounded-md shadow-md ${
         theme === "dark" ? "bg-dark-grey" : "bg-white"
