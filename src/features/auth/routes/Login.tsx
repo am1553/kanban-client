@@ -45,6 +45,18 @@ function Login() {
               <span>Login</span>
             </PrimaryBtn>
           </div>
+          <button
+            type="button"
+            className="text-main-purple underline text-body-l"
+            onClick={() => {
+              const formData = new FormData();
+              formData.append("email", "am.career11@gmail.com");
+              formData.append("password", "test123");
+              handleSubmit(formData);
+            }}
+          >
+            Impersonate as Aryan
+          </button>
           <Link to="/auth/register">Register?</Link>
         </>
       </Form>
