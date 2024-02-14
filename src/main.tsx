@@ -15,18 +15,19 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: ":boardID",
-        Component: Board,
-      },
-      {
         path: "",
         Component: NoBoards,
+      },
+      {
+        path: ":boardID",
+        Component: Board,
       },
     ],
   },
   {
     path: "/auth",
     Component: AuthLayout,
+    errorElement: <div className="">Auth Page Error.</div>,
     children: [
       {
         path: "",
