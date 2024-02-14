@@ -37,7 +37,11 @@ export default function AuthContextProvider({
     if (tokenExists !== "undefined" && tokenExists) {
       setToken(tokenExists);
     }
-  }, [getCookie]);
+    if (tokenExists === "undefined") {
+      localStorage.removeItem("user");
+      removeCookie("token");
+    }
+  }, [getCookie, removeCookie]);
 
   const login = async (data: LoginData) => {
     return await auth

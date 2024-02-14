@@ -1,11 +1,8 @@
 import { useEffect } from "react";
-import { useAuth, useTheme } from "./hooks";
+import { useTheme } from "./hooks";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { AppLayout } from "./layout";
-
 function App() {
   const { theme } = useTheme();
-  const { token } = useAuth();
   const user = localStorage.getItem("user");
   const navigate = useNavigate();
   const { boardID } = useParams();
@@ -29,17 +26,13 @@ function App() {
   }, [boardID]);
 
   return (
-    token && (
-      <div
-        className={`${
-          theme === "light" ? "text-black" : "text-white"
-        } text-body-m md:text-body-l h-screen w-screen`}
-      >
-        <AppLayout>
-          <Outlet />
-        </AppLayout>
-      </div>
-    )
+    <div
+      className={`${
+        theme === "light" ? "text-black" : "text-white"
+      } text-body-m md:text-body-l h-screen w-screen`}
+    >
+      <Outlet />
+    </div>
   );
 }
 

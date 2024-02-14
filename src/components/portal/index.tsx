@@ -12,7 +12,7 @@ export const Modal = (props: ModalProps) => {
   if (!isOpen) return;
   return ReactDom.createPortal(
     <div
-      className="absolute inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
       ref={ref}
     >
       {children}

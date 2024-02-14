@@ -8,7 +8,7 @@ import { Board, NoBoards } from "./features/board/index.ts";
 import { Login, Register } from "./features/auth/index.ts";
 import { QueryClient, QueryClientProvider } from "react-query";
 import AuthContextProvider from "./context/auth/index.tsx";
-import { AuthLayout } from "./layout/index.ts";
+import { AppLayout, AuthLayout } from "./layout/index.ts";
 
 const router = createBrowserRouter([
   {
@@ -16,27 +16,31 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: "",
-        Component: NoBoards,
+        path: "auth",
+        Component: AuthLayout,
+        children: [
+          {
+            path: "",
+            Component: Login,
+          },
+          {
+            path: "register",
+            Component: Register,
+          },
+        ],
       },
       {
-        path: ":boardID",
-        Component: Board,
-      },
-    ],
-  },
-  {
-    path: "/auth",
-    Component: AuthLayout,
-    errorElement: <div className="">Auth Page Error.</div>,
-    children: [
-      {
-        path: "",
-        Component: Login,
-      },
-      {
-        path: "register",
-        Component: Register,
+        Component: AppLayout,
+        children: [
+          {
+            path: "",
+            Component: NoBoards,
+          },
+          {
+            path: ":boardID",
+            Component: Board,
+          },
+        ],
       },
     ],
   },
