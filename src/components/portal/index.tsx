@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import ReactDom from "react-dom";
 interface ModalProps {
   children: JSX.Element;
@@ -9,6 +9,17 @@ interface ModalProps {
 export const Modal = (props: ModalProps) => {
   const { children, isOpen } = props;
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const body = document.getElementsByTagName("body")[0];
+    document.addEventListener("DOMContentLoaded", function () {
+      if (isOpen) {
+        body.style.overflow = "hidden";
+      } else {
+        body.style.overflow = "auth";
+      }
+    });
+  }, [isOpen]);
   if (!isOpen) return;
   return ReactDom.createPortal(
     <div
