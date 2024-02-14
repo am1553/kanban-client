@@ -1,14 +1,16 @@
 import { Add, LogoMobile, VerticalEllipsis } from "../../../assets";
 import { PrimaryBtn } from "../../../components/buttons";
-import { useOnClickOutside, useTheme } from "../../../hooks";
+import { useAuth, useOnClickOutside, useTheme } from "../../../hooks";
 import BoardsPanelToggle from "./BoardsPanelToggle";
 import { Modal } from "../../../components/portal";
 import { EditBoard, NewTask, useBoards } from "../../../features/board";
 import { useRef, useState } from "react";
 import DeleteConfirmation from "../../../components/delete-confirmation";
 import Loader from "../../../components/loader";
+import { Logout } from "@mui/icons-material";
 
 function Header() {
+  const { logout } = useAuth();
   const { boardQuery, deleteMutation } = useBoards();
   const board = boardQuery?.data;
   const [isMenu, setIsMenu] = useState<boolean>(false);
@@ -86,6 +88,14 @@ function Header() {
                 onClick={handleOpenModalDeleteBoard}
               >
                 Delete Board
+              </button>
+              <button
+                type="button"
+                className="md:hidden text-medium-grey text-opacity-50 flex items-center gap-2 p-1"
+                onClick={logout}
+              >
+                <Logout style={{ fontSize: "18px" }} />
+                <span>Logout</span>
               </button>
             </div>
           )}
