@@ -1,4 +1,5 @@
 import { useBoards } from "..";
+import Loader from "../../../components/loader";
 import { Column } from "../components";
 import { Column as ColumnType, useTasks } from "../services";
 
@@ -8,7 +9,11 @@ function Board() {
   const { tasksQuery } = useTasks();
   const tasks = tasksQuery?.data;
 
-  return (
+  return boardQuery.isLoading ? (
+    <div className="flex h-full w-full items-center justify-center">
+      <Loader />
+    </div>
+  ) : (
     <div className="flex gap-6 p-6 w-fit">
       {board?.columns?.map((column: ColumnType) => {
         const columnTasks = tasks?.filter(

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { api } from "../../../lib/axios-config";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../hooks";
 
 export type TaskType = {
   id?: string;
@@ -18,7 +19,9 @@ function useBoards() {
   const queryClient = useQueryClient();
   const { boardID } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();
   const getBoards = async () => {
+    if (!token) return;
     return await api
       .get("/boards")
       .then((res) => {
