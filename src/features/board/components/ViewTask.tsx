@@ -66,7 +66,7 @@ function ViewTask({
         {isMenu && (
           <div
             ref={menuRef}
-            className="absolute bg-white p-4 flex flex-col rounded-md shadow-md top-10 right-0 items-start"
+            className="absolute bg-white p-4 flex flex-col rounded-md shadow-md top-10 right-0 items-start z-50"
           >
             <button
               className="p-1 w-full text-left"

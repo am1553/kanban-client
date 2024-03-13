@@ -24,7 +24,11 @@ export const useAuthServices = () => {
 
   const handleAuthSuccess = async (token: string, user: User) => {
     setCookie("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    const { email, first_name, last_name, id } = user;
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ email, first_name, last_name, id })
+    );
     const fetchBoards = async () => {
       try {
         const response = await fetch(

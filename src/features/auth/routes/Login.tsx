@@ -3,8 +3,13 @@ import { Form, TextField } from "../../../components/form-elements";
 import { useAuthServices } from "../services";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/loader";
+import { useCookie } from "../../../hooks";
 
 function Login() {
+  const { getCookie } = useCookie();
+
+  console.log(getCookie("token"));
+  console.log(localStorage.getItem("user"));
   const { loginMutation } = useAuthServices();
 
   const handleSubmit = (formData: FormData) => {
